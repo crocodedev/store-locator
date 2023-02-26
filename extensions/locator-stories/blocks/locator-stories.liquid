@@ -1,0 +1,35 @@
+{{ app.metafields.locator[block.settings.type_map].value.html }}
+
+{% schema %}
+{
+    "name": "Locator stories",
+    "target": "section",
+    "enabled_on": {
+        "templates": ["index"]
+    },
+    "stylesheet": "app.css",
+    "javascript": "app.js",
+    "settings": [
+        {
+            "type": "select",
+            "id": "type_map",
+            "label": "Type map",
+            "options": [
+                {
+                    "value": "classic",
+                    "label": "Classic"
+                },
+                {
+                    "value": "dark",
+                    "label": "Dark"
+                },
+                {
+                    "value": "only_map",
+                    "label": "Only map"
+                }
+            ],
+            "default": "classic"
+        }
+    ]
+}
+{% endschema %}
