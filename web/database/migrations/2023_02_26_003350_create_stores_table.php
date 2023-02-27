@@ -16,7 +16,8 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('session_id')->references('id')->on('session');
+            $table->string('session_id')->nullable(false);
+//            $table->foreign('session_id')->references('id')->on('sessions');
 
             // Название магазина
             $table->string('name')->comment('Название магазина (номер магазина)');

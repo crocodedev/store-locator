@@ -1,18 +1,14 @@
 <?php
 
-use App\Exceptions\ShopifyProductCreatorException;
 use App\Lib\AuthRedirection;
 use App\Lib\EnsureBilling;
-use App\Lib\ProductCreator;
 use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Shopify\Auth\OAuth;
-use Shopify\Auth\Session as AuthSession;
 use Shopify\Clients\HttpHeaders;
-use Shopify\Clients\Rest;
 use Shopify\Context;
 use Shopify\Exception\InvalidWebhookException;
 use Shopify\Utils;
@@ -67,7 +63,7 @@ Route::get('/api/auth/callback', function (Request $request) {
     } else {
         Log::error(
             "Failed to register APP_UNINSTALLED webhook for shop $shop with response body: " .
-                print_r($response->getBody(), true)
+            print_r($response->getBody(), true)
         );
     }
 
@@ -82,46 +78,6 @@ Route::get('/api/auth/callback', function (Request $request) {
 
     return redirect($redirectUrl);
 });
-
-Route::get('/api/products/count', function (Request $request) {
-    /** @var AuthSession */
-    $session = $request->get('shopifySession'); // Provided by the shopify.auth middleware, guaranteed to be active
-
-    $client = new Rest($session->getShop(), $session->getAccessToken());
-    $result = $client->get('products/count');
-
-    return response($result->getDecodedBody());
-})->middleware('shopify.auth');
-
-Route::get('/api/products/create', function (Request $request) {
-    /** @var AuthSession */
-    $session = $request->get('shopifySession'); // Provided by the shopify.auth middleware, guaranteed to be active
-
-    $success = $code = $error = null;
-    try {
-        ProductCreator::call($session, 5);
-        $success = true;
-        $code = 200;
-        $error = null;
-    } catch (\Exception $e) {
-        $success = false;
-
-        if ($e instanceof ShopifyProductCreatorException) {
-            $code = $e->response->getStatusCode();
-            $error = $e->response->getDecodedBody();
-            if (array_key_exists("errors", $error)) {
-                $error = $error["errors"];
-            }
-        } else {
-            $code = 500;
-            $error = $e->getMessage();
-        }
-
-        Log::error("Failed to create products: $error");
-    } finally {
-        return response()->json(["success" => $success, "error" => $error], $code);
-    }
-})->middleware('shopify.auth');
 
 Route::post('/api/webhooks', function (Request $request) {
     try {

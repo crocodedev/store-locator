@@ -1,46 +1,53 @@
-import { Card, Page, Layout, TextContainer, Heading } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
+import { Page } from "@shopify/polaris";
+import { useAppQuery, useAuthenticatedFetch } from "../hooks";
 
-export default function PageName() {
+export default async function PageName() {
+    const fetch = useAuthenticatedFetch();
+
+    // const {
+    //     data,
+    // } = useAppQuery({
+    //     url: "/api/store/store-1",
+    //     method: "POST",
+    //     data: {
+    //         test: 'data',
+    //         test2: 'data2'
+    //     },
+    //     reactQueryOptions: {
+    //         onSuccess: () => {
+    //             console.log('test');
+    //         },
+    //     },
+    // });
+
+    // let form = {
+    //     name: '123',
+    //     address_1: '321',
+    //     address_2: 'address_2321',
+    //     city: 'city123',
+    //     postcode: 'postcode123',
+    //     state: 'state123',
+    // };
+    //
+    // const data = await fetch("/api/store/test1", {
+    //     method: 'DELETE',
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     }
+    // });
+
+    const data = await fetch("/api/store", {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+        }
+    });
+
+    console.log(data);
+
   return (
     <Page>
-      <TitleBar
-        title="Page name"
-        primaryAction={{
-          content: "Primary action",
-          onAction: () => console.log("Primary action"),
-        }}
-        secondaryActions={[
-          {
-            content: "Secondary action",
-            onAction: () => console.log("Secondary action"),
-          },
-        ]}
-      />
-      <Layout>
-        <Layout.Section>
-          <Card sectioned>
-            <Heading>Heading</Heading>
-            <TextContainer>
-              <p>Body</p>
-            </TextContainer>
-          </Card>
-          <Card sectioned>
-            <Heading>Heading</Heading>
-            <TextContainer>
-              <p>Body</p>
-            </TextContainer>
-          </Card>
-        </Layout.Section>
-        <Layout.Section secondary>
-          <Card sectioned>
-            <Heading>Heading</Heading>
-            <TextContainer>
-              <p>Body</p>
-            </TextContainer>
-          </Card>
-        </Layout.Section>
-      </Layout>
+        text page
     </Page>
   );
 }
