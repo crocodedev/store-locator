@@ -19,6 +19,8 @@ use Shopify\Utils;
 use Shopify\Webhooks\Registry;
 use Shopify\Webhooks\Topics;
 
+use PulkitJalan\GeoIP\GeoIP;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -138,5 +140,28 @@ Route::post('/api/webhooks', function (Request $request) {
     } catch (\Exception $e) {
         Log::error("Got an exception when handling '$topic' webhook: {$e->getMessage()}");
         return response()->json(['message' => "Got an exception when handling '$topic' webhook"], 500);
+    }
+});
+Route::get('/check-ip', function (Request $request) {
+    // Repository - https://github.com/pulkitjalan/geoip
+    // 37.212.9.229, 77.91.102.66
+    // Использует БД. БД находить в /storage
+    /*$geoip = new GeoIP([
+        'driver' => 'maxmind_database',
+        'maxmind_database'  => [
+            'database' => storage_path('GeoLite2-City.mmdb'),
+            'license_key' => 'sn799ut8cy13ZiUb'
+        ]
+    ]);
+    $geoip->setIp('77.91.102.66');
+    $result = $geoip->getRaw();
+    dd($result);*/
+    // Просто поиск по IP
+    $geoip = new GeoIP();
+    if ( $request->get('geoIp') ) {
+        $geoip->setIp($request->get('geoIp'));
+        dd($geoip->getRaw());
+    } else {
+        dd('No IP specified');
     }
 });
