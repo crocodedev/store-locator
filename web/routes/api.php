@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return "Hello API";
 });
+
+Route::get('/billing-plan', [\App\Http\Controllers\BillingController::class, 'index']);
+Route::post('/activate-billing-plan', [\App\Http\Controllers\BillingController::class, 'active'])->name('activatePlan');
+Route::get('/set-billing-plan', [\App\Http\Controllers\BillingController::class, 'set']);
+Route::post('/cancel-plan', [\App\Http\Controllers\BillingController::class, 'cancel'])->name('cancelPlan');
