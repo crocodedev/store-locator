@@ -16,9 +16,10 @@ class CreatePlanToUserTable extends Migration
         Schema::create('plan_to_user', function (Blueprint $table) {
             $table->id();
             $table->integer('plan_id');
-            $table->string('shop');
+            $table->string('shop')->unique();
             $table->string('charge_id');
             $table->string('status');
+            $table->string('active_until');// Время до которого действует подписка
             $table->timestamps();
         });
     }
