@@ -107,10 +107,10 @@
             <h2 class="store-locator__header">Our stores</h2>
             <div id="listStories" class="store-locator__list">
                 @foreach ($geo as $getItem)
-                <div class="store-locator__item" data-slug="{{ $getItem['properties']['slug'] }}">
-                    <h3 class="store-locator__name">{{ $getItem['properties']['name'] }}</h3>
-                    <span class="store-locator__text">{{ $getItem['properties']['city'] }} {{ $getItem['properties']['address_1'] }} {{ $getItem['properties']['address_2'] }}</span>
-                </div>
+                    <div class="store-locator__item" data-slug="{{ $getItem['properties']['slug'] }}">
+                        <h3 class="store-locator__name">{{ $getItem['properties']['name'] }}</h3>
+                        <span class="store-locator__text">{{ $getItem['properties']['city'] }} {{ $getItem['properties']['address_1'] }} {{ $getItem['properties']['address_2'] }}</span>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -242,6 +242,21 @@ ${(info.city || info.country) ? `<span class="store-locator__group">
             }
         });
 
+        const updateListStories = (features = []) => {
+            features = features.length ? features : map.queryRenderedFeatures({ layers: ['store'] });
+
+            if (features) {
+                const uniqueFeatures = getUniqueFeatures(features, 'slug');
+
+                renderListStories(uniqueFeatures);
+
+                viewStore = uniqueFeatures;
+            }
+        }
+
+        // const features = geojson.features.filter(feature => map.getBounds().contains(feature.geometry.coordinates));
+        // updateListStories(features);
+
         map.on('click', () => {
             activeteElement(null);
         });
@@ -256,6 +271,10 @@ ${(info.city || info.country) ? `<span class="store-locator__group">
             activeteElement(e.features[0], coordinates);
         });
 
+        // map.on('moveend', (e) => {
+        //     updateListStories();
+        // });
+
         document.querySelector('#listStories').addEventListener('click', (event) => {
             let element = event.target.closest('[data-slug]');
 
@@ -263,5 +282,9 @@ ${(info.city || info.country) ? `<span class="store-locator__group">
 
             activeteElement(activeElement);
         });
+
+        // popUP.on('close', () => {
+        //     if (activeElement) activeteElement(null);
+        // });
     });
 </script>

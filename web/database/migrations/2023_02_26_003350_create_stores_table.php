@@ -23,6 +23,8 @@ class CreateStoresTable extends Migration
             $table->string('name')->comment('Название магазина (номер магазина)');
             $table->string('slug')->comment('Уникальный идинтификатор магазина (для доступа по ссылке)');
 
+            $table->string('status')->default('draft')->comment('Статус отображения магазина');
+
             // Приоритетные данные магазина
             $table->string('address_1')
                 ->comment('Строка адреса (обычно для указания улицы)');

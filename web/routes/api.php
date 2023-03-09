@@ -66,4 +66,24 @@ Route::get('/products/count', function (Request $request) {
 
 //Route::get('/store', [StoreController1::class, 'index'])->middleware('shopify.auth');
 
+Route::post('/store/ids', [StoreController::class, 'destroyIds'])->middleware('shopify.auth');
+
+Route::post('/store/status', [StoreController::class, 'statusIds'])->middleware('shopify.auth');
+
 Route::resource('store', StoreController::class)->middleware('shopify.auth');
+
+Route::get('template', [StoreController::class, 'getTemplate']);
+
+Route::get('store-locator', function (Request $request) {
+    $storeLocatorContent = \App\Repositories\StoreTemplate::get('classic', 'crocodeio.myshopify.com');
+//
+//    $metafield = (new \App\Repositories\Metafield($request->get('shop')))->set('classic', [
+//        'html' => $storeLocatorContent
+//    ]);
+
+    return response($storeLocatorContent)->withHeaders(['Content-Type' => 'application/liquid']);
+});
+
+Route::get('import-file', [\App\Http\Controllers\API\ExpImpController::class, 'import'])->middleware('shopify.auth');
+
+Route::post('export-file', [\App\Http\Controllers\API\ExpImpController::class, 'export'])->middleware('shopify.auth');

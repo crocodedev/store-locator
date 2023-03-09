@@ -1,0 +1,7 @@
+.customFAQItem {
+    cursor: pointer;
+}
+
+.customFAQItem + .customFAQItem {
+    border-top: var(--p-border-divider);
+}

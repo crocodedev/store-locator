@@ -13,6 +13,7 @@ class Store extends Model
         'session_id',
         'name',
         'slug',
+        'status',
         'address_1',
         'address_2',
         'city',
