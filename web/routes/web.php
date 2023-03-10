@@ -140,3 +140,6 @@ Route::post('/api/webhooks', function (Request $request) {
         return response()->json(['message' => "Got an exception when handling '$topic' webhook"], 500);
     }
 });
+Route::get('/map_html', function () {
+    return view('templates.map');
+});
