@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use Shopify\Auth\Session as AuthSession;
 use Shopify\Clients\Rest;
 use App\Http\Controllers\API\StoreController;
+use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\ExpImpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +86,8 @@ Route::get('store-locator', function (Request $request) {
     return response($storeLocatorContent)->withHeaders(['Content-Type' => 'application/liquid']);
 });
 
-Route::get('import-file', [\App\Http\Controllers\API\ExpImpController::class, 'import'])->middleware('shopify.auth');
+Route::get('import-file', [ExpImpController::class, 'import'])->middleware('shopify.auth');
 
-Route::post('export-file', [\App\Http\Controllers\API\ExpImpController::class, 'export'])->middleware('shopify.auth');
+Route::post('export-file', [ExpImpController::class, 'export'])->middleware('shopify.auth');
+
+Route::post('/contact', [ContactController::class, 'store'])->middleware('shopify.auth');
